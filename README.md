@@ -5,3 +5,8 @@ Admin account credentials
 
 Email = admin@mlifestore.com
 password = !Qaz2wsx
+
+
+
+command to update database
+update-database
