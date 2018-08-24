@@ -1,41 +1,59 @@
-﻿@model MyShop.Core.Models.Product
+﻿@model MyShop.Core.ViewModels.ProductDetailViewModel
 
 @{
-    ViewBag.Title = Model.Name + " Details";
+    ViewBag.Title = Model.Product.Name + " Details";
 }
 
-<h2>@Html.DisplayFor(model=>model.Name)</h2>
+<div class="col-lg-12" style="text-align:center">
+    <ul class="list-inline list-group" style="border: 1px solid #dedede;border-radius: 8px;">
+        @foreach (var cat in Model.ProductCategories)
+        {
+            <li>
+                @Html.ActionLink(cat.Category, "ProductList", new { Category = cat.Category }, new { @class = Request["Category"] == cat.Category ? "list-group-item active" : "list-group-item" })
+            </li>
+        }
+    </ul>
 
-<div>
+</div>
+
+<h2>@Html.DisplayFor(model=>model.Product.Name)</h2>
+
+<div style="min-height:400px">
     <div class="col-md-2">
-        <img class="img-responsive" src="~/Content/ProductImages/@Model.Image"/>
+        <img class="img-responsive" src="~/Content/ProductImages/@Model.Product.Image"/>
     </div>
     <div class="col-md-10">
         <dl class="dl-horizontal">
           
 
             <dt>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Product.Description)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Description)
+                @Html.DisplayFor(model => model.Product.Description)
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Product.Price)
             </dt>
 
             <dd>
-                $@Html.DisplayFor(model => model.Price)
+                $@Html.DisplayFor(model => model.Product.Price)
             </dd>
 
             <dt></dt>
-            <dd><a href="@Url.Action("AddToBasket", "Basket", new { Id=Model.Id })" class="btn btn-default">Add To Basket</a></dd>
+            <dd><a href="@Url.Action("AddToBasket", "Basket", new { Id=Model.Product.Id })" class="btn btn-default">Add To Basket</a></dd>
 
             <dt></dt>
-            <dd>@Html.ActionLink("Back to List", "Index")</dd>
-</dl>
+            
+
+            <dd>
+                <a href="@Url.Action("ProductList","Home", new { Category = Model.Product.Category })" style="color:black; font-weight:bold;">
+                    <p>Back to List</p>
+                </a>
+           </dd>
+        </dl>
     </div>
  </div>
-<div class="col-md-12 clearfix"></div>
+

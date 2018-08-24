@@ -43,14 +43,46 @@ namespace MyShop.WebUI.Controllers
             return View(model);
         }
 
+        public ActionResult ProductList(string Category = null)
+        {
+            List<Product> products;
+            List<ProductCategory> categories = productCategories.Collection().ToList();
+            Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
+
+            if (Category == null)
+            {
+                products = context.Collection().ToList();
+            }
+            else
+            {
+                products = context.Collection().Where(p => p.Category == Category).ToList();
+            }
+
+
+            ProductListViewModel model = new ProductListViewModel();
+            model.Products = products;
+            model.ProductCategories = categories;
+            model.Customer = customer;
+            return View(model);
+        }
+
         public ActionResult Details(string Id) {
             Product product = context.Find(Id);
+            List<ProductCategory> categories = productCategories.Collection().ToList();
+            Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
+
+            ProductDetailViewModel model = new ProductDetailViewModel();
+            model.Product = product;
+            model.ProductCategories = categories;
+            model.Customer = customer;
+
+
             if (product == null)
             {
                 return HttpNotFound();
             }
             else {
-                return View(product);
+                return View(model);
             }
         }
 
