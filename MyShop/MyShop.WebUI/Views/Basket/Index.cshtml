@@ -4,6 +4,11 @@
     ViewBag.Title = "Basket";
 }
 
+<script type="text/javascript">
+    $("#dropDown").onchange(function () {
+        alert($("#dropDown").val());
+</script>
+
 <h2>Basket</h2>
 
 <table class="table">
@@ -31,7 +36,12 @@
             @Html.DisplayFor(modelItem => item.ProductName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Quanity)
+              <select style="width=45px" id="dropDown">
+                  @for(int i = 1; i <= 10; i++)
+                  {
+                      <option value="@i">@i</option>
+                  }
+              </select>          
         </td>
         
         <td>
@@ -48,7 +58,7 @@
     <tr>
         <td colspan="4" style="text-align:right"><strong>Basket Total</strong></td>
         <td>@String.Format("{0:c}", (from p in Model select p.Price * p.Quanity).Sum())</td>
-        <td><a href="@Url.Action("Checkout", "Basket")">Checkout</a></td>
+        <td><a href="@Url.Action("Checkout", "Basket")"class="btn btn-primary">Checkout</a></td>
     </tr>
 
 </table>
