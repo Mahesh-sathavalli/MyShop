@@ -66,9 +66,11 @@ namespace MyShop.Services
             return basket;
         }
 
-        public void AddToBasket(HttpContextBase httpContext, string productId) {
+        public bool AddToBasket(HttpContextBase httpContext, string productId, int quantity = 1) {
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.ProductId == productId);
+            bool isOkaytoAdd = true;
+
 
             if (item == null)
             {
@@ -78,14 +80,54 @@ namespace MyShop.Services
                     ProductId = productId,
                     Quanity = 1
                 };
+                var product = productContext.Find(item.ProductId);
 
-                basket.BasketItems.Add(item);
+                if(product != null)
+                {
+                    if (product.InStock == 0)
+                    {
+                        isOkaytoAdd = false;
+                    }
+                    else if(product.InStock > quantity)
+                    {
+                        UpdateStock(product, "Add");
+                        basket.BasketItems.Add(item);
+                        isOkaytoAdd = true;
+                    }
+                }
+                
             }
             else {
-                item.Quanity = item.Quanity + 1;
+                var product = productContext.Find(item.ProductId);
+                if(product != null)
+                {
+                    if (product.InStock == 0 )
+                    {
+                        isOkaytoAdd = false;
+                    }else if((product.InStock + item.Quanity) >= quantity)
+                    {
+                        product.InStock = product.InStock + item.Quanity;
+                        UpdateStock(product, "Add",quantity);
+                        item.Quanity = quantity;
+                        basket.BasketItems.FirstOrDefault(i => i.ProductId == productId).Quanity = item.Quanity;
+                    }
+                    
+                }
+                
             }
-
+            productContext.Commit();
             basketContext.Commit();
+            return isOkaytoAdd;
+        }
+
+        private void UpdateStock(Product product,string operation,int quantity = 1)
+        {
+            if(operation =="Add")
+            {
+                product.InStock = product.InStock - quantity;
+                productContext.Update(product);
+            }
+            
         }
 
         public void RemoveFromBasket(HttpContextBase httpContext, string itemId) {
@@ -110,8 +152,10 @@ namespace MyShop.Services
                                    Id = b.Id,
                                    Quanity = b.Quanity,
                                    ProductName = p.Name,
+                                   ProductID = p.Id,
                                    Image = p.Image,
-                                   Price = p.Price
+                                   Price = p.Price,
+                                   CurrentStock = p.InStock
                                }
                               ).ToList();
 
@@ -148,6 +192,17 @@ namespace MyShop.Services
             Basket basket = GetBasket(httpContext, false);
             basket.BasketItems.Clear();
             basketContext.Commit();
+        }
+
+        public bool CheckItemQuantity(HttpContextBase httpContext, string productID)
+        {
+            Basket basket = GetBasket(httpContext, true);
+            BasketItem item = basket.BasketItems.FirstOrDefault(i => i.ProductId == productID);
+
+
+
+            return true;
+
         }
     }
 }

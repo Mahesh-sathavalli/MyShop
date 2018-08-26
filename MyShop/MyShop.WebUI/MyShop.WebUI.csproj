@@ -315,6 +315,7 @@
     <Content Include="Views\OrderManager\UpdateOrder.cshtml" />
     <Content Include="Views\OrderManager\OrderItems.cshtml" />
     <Content Include="Views\Home\ProductList.cshtml" />
+    <Content Include="Views\Basket\PaymentInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

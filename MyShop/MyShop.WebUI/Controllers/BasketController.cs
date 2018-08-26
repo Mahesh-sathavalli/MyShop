@@ -28,11 +28,20 @@ namespace MyShop.WebUI.Controllers
 
         public ActionResult AddToBasket(string Id)
         {
+            
             basketService.AddToBasket(this.HttpContext, Id);
 
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult IncreaseQuantity(string ID,int quantity)
+        {
+            
+            basketService.AddToBasket(this.HttpContext, ID,quantity);
+
+            return RedirectToAction("Index");
+        }
         public ActionResult RemoveFromBasket(string Id)
         {
             basketService.RemoveFromBasket(this.HttpContext, Id);
@@ -42,7 +51,7 @@ namespace MyShop.WebUI.Controllers
 
         public PartialViewResult BasketSummary() {
             var basketSummary = basketService.GetBasketSummary(this.HttpContext);
-
+            
             return PartialView(basketSummary);
         }
 
@@ -80,12 +89,21 @@ namespace MyShop.WebUI.Controllers
             order.Email = User.Identity.Name;
 
             //process payment
+            return View("PaymentInfo");            
+        }
 
-            order.OrderStatus = "Payment Processed";
-            orderService.CreateOrder(order, basketItems);
-            basketService.ClearBasket(this.HttpContext);
+        public ActionResult PaymentInfo()
+        {
+            return Redirect("PaymentInfo");            
+        }
 
-            return RedirectToAction("Thankyou", new { OrderId = order.Id });
+        [HttpPost]
+        [Authorize]
+        public ActionResult PaymentInfo(PaymentInfo PaymentInfo)
+        {
+            
+           // return RedirectToAction("Thankyou", new { OrderId = order.Id });
+            return RedirectToAction("Thankyou");
         }
 
         public ActionResult ThankYou(string OrderId) {

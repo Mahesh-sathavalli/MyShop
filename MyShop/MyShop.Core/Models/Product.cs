@@ -20,5 +20,8 @@ namespace MyShop.Core.Models
         public string Category { get; set; }
         public string Image { get; set; }
 
+        [Range(0,100)]
+        public int InStock { get; set; }
+
     }
 }

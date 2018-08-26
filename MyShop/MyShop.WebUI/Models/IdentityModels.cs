@@ -29,5 +29,7 @@ namespace MyShop.WebUI.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<MyShop.Core.Models.PaymentInfo> PaymentInfoes { get; set; }
     }
 }

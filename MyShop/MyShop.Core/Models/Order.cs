@@ -20,6 +20,8 @@ namespace MyShop.Core.Models
         public string State { get; set; }
         public string ZipCode { get; set; }
         public string OrderStatus { get; set; }
+
+        public PaymentInfo Payment { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

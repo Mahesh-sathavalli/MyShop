@@ -17,10 +17,10 @@ namespace MyShop.WebUI.Tests.Controllers
         {
             IRepository<Product> productContext = new Mocks.MockContext<Product>();
             IRepository<ProductCategory> productCatgeoryContext = new Mocks.MockContext<ProductCategory>();
-
+            IRepository<Customer> customers = new Mocks.MockContext<Customer>();
             productContext.Insert(new Product());
 
-            HomeController controller = new HomeController(productContext, productCatgeoryContext);
+            HomeController controller = new HomeController(productContext, productCatgeoryContext, customers);
 
             var result = controller.Index() as ViewResult;
             var viewModel = (ProductListViewModel)result.ViewData.Model;
