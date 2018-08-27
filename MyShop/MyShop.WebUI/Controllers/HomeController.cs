@@ -43,21 +43,27 @@ namespace MyShop.WebUI.Controllers
             return View(model);
         }
 
-        public ActionResult ProductList(string Category = null)
+        public ActionResult ProductList(string Category = null,string search=null)
         {
             List<Product> products;
             List<ProductCategory> categories = productCategories.Collection().ToList();
             Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
 
+           
             if (Category == null)
             {
                 products = context.Collection().ToList();
+                
             }
             else
             {
                 products = context.Collection().Where(p => p.Category == Category).ToList();
             }
 
+            if (!string.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(search)).ToList();
+            }
 
             ProductListViewModel model = new ProductListViewModel();
             model.Products = products;
