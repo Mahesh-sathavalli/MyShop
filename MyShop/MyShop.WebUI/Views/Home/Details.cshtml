@@ -18,7 +18,7 @@
 
 <h2>@Html.DisplayFor(model=>model.Product.Name)</h2>
 
-<div style="min-height:400px">
+<div class="col-md-12" style="min-height:400px">
     <div class="col-md-2">
         <img class="img-responsive" src="~/Content/ProductImages/@Model.Product.Image"/>
     </div>
@@ -43,17 +43,22 @@
             </dd>
 
             <dt></dt>
-            <dd><a href="@Url.Action("AddToBasket", "Basket", new { Id=Model.Product.Id })" class="btn btn-default">Add To Basket</a></dd>
+            <dd><a href="@Url.Action("AddToBasket", "Basket", new { Id=Model.Product.Id })" class="btn btn-success">Add To Basket</a></dd>
 
             <dt></dt>
             
 
-            <dd>
-                <a href="@Url.Action("ProductList","Home", new { Category = Model.Product.Category })" style="color:black; font-weight:bold;">
-                    <p>Back to List</p>
-                </a>
-           </dd>
+            
         </dl>
     </div>
  </div>
 
+<div class="col-md-12">
+
+        <a href="@Url.Action("ProductList","Home", new { Category = Model.Product.Category })" style="color:black; font-weight:bold;">
+            <p>Back to List</p>
+        </a>
+    
+</div>
+
+<div class="col-md-12 clearfix" />
