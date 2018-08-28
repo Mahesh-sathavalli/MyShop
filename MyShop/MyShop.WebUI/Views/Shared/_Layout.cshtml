@@ -109,6 +109,14 @@
 
         $('#searchText').val(searchText);
 
+        if (searchText !== undefined) {
+            $('#searchListHead').css('display', 'block');
+            $('#productListHead').css('display', 'none');
+        } else {
+            $('#productListHead').css('display', 'block');
+            $('#searchListHead').css('display', 'none');
+        }
+
 
         function search() {
             var searchText = $('#searchText').val();
