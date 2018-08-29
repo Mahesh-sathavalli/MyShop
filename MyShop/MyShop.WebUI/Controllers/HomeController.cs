@@ -14,12 +14,13 @@ namespace MyShop.WebUI.Controllers
         IRepository<Customer> customers;
         IRepository<Product> context;
         IRepository<ProductCategory> productCategories;
-
-        public HomeController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<Customer> Customers)
+        IRepository<PaymentInfo> PaymentInfoContext;
+        public HomeController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<Customer> Customers, IRepository<PaymentInfo> PaymentInfo) 
         {
             context = productContext;
             productCategories = productCategoryContext;
             customers = Customers;
+            PaymentInfoContext = PaymentInfo;
         }
 
         public ActionResult Index(string Category=null)

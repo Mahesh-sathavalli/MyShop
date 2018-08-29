@@ -30,10 +30,11 @@
         <td><img style="height:50px" class="img" src="~/Content/ProductImages/@item.Image" /></td>
         <td>
             @Html.DisplayFor(modelItem => item.ProductName)
-            @Html.Hidden("itemID",item.ProductID)
+            @Html.Hidden("itemID", item.ProductID)
         </td>
         <td>
-              <select style="width=45px" id="dropDown" class="selectDrop">
+            
+              <select style="width=45px" id="dropDown" class="selectDrop" data-id="@item.ProductID">
                   @for(int i = 1; i <= 10; i++)
                   {
                       <option value="@i">@i</option>
@@ -61,15 +62,11 @@
 </table>
 
 <script type="text/javascript">
+ 
     $(function () {
-        $('.selectDrop').change(function () {
-            var val = $(this).val;
-        })
-    });
-    $(function () {
-        $("#dropDown").change(function () {
-            var value = $("#itemID").val();
-            var selectedQuantity = $("#dropDown").val();
+        $(".selectDrop").change(function () {
+            var value = $(this).attr("data-id");
+            var selectedQuantity = $(this).val();
             $.ajax({
                 type:"POST",
                 url: '@(Url.Action("IncreaseQuantity", "Basket"))',
