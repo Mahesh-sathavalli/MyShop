@@ -34,10 +34,10 @@
         </td>
         <td>
             
-              <select style="width=45px" id="dropDown" class="selectDrop" data-id="@item.ProductID">
+              <select style="width=45px" id="dropDown" class="selectDrop" data-id="@item.ProductID" value ="@item.Quanity">
                   @for(int i = 1; i <= 10; i++)
                   {
-                      <option value="@i">@i</option>
+                      <option value="@i" @(item.Quanity == i ? "selected" : "")>@i  </option>
                   }
               </select>          
         </td>
@@ -46,6 +46,7 @@
             @String.Format("{0:c}", item.Price)
         </td>
         <td>
+            @Html.Hidden("quant",item.Quanity)
             @String.Format("{0:c}", item.Price * item.Quanity)
         </td>
         <td>
@@ -74,6 +75,7 @@
                     'Id': value,
                     'quantity': selectedQuantity},
                 success: function (result) {
+                    window.location.reload();
                     return result;
                 },
                 error: function (result) {
