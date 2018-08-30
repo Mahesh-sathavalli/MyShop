@@ -32,33 +32,33 @@ else
     @foreach (var item in Model.ProductCategories)
     {
 
-        <div class="col-md-2 catList">
-            <div style="text-align:center" >
-                <a href="@Url.Action("ProductList","Home", new { Category = item.Category })"  class="btn btn-default" >
+        <div class="col-md-2 row" style="height:185px;margin:5px;padding:5px;">
+            <div class="col-md-12 categorycell" style="text-align:center">
+                <a href="@Url.Action("ProductList","Home", new { Category = item.Category })" class="btn btn-default">
 
                     @if (@item.Image == null)
                     {
-                        <img class="img-responsive"  src="~/Content/ProductImages/default/imageNotFound.png" />
+                        <img style="width: 100%;"src="~/Content/ProductImages/default/imageNotFound.png" />
                     }
                     else
                     {
-                        <img class="img-responsive" src="~/Content/ProductImages/@item.Image" />
+                        <img style="width: 100%;" src="~/Content/ProductImages/@item.Image" />
                     }
 
 
 
                 </a>
                 <a href="@Url.Action("ProductList","Home", new { Category = item.Category })" style="color:black; font-weight:bold;" title="@item.Category">
-                    
+
                     @if (@item.Category.Length > 20)
                     {
-                        <p>@item.Category.Substring(0,20)<span>...</span></p>
+                        <p>@item.Category.Substring(0, 20)<span>...</span></p>
                     }
                     else
                     {
                         <p>@item.Category</p>
                     }
-                    
+
                 </a>
             </div>
 
