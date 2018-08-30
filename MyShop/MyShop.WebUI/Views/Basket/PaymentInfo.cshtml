@@ -82,6 +82,19 @@
 }
 <script src="~/Scripts/jquery.creditCardValidator.js"></script>
 <script>
+    $('#Number').on('keyup', function () {
+        var cardType = "Visa";
+        if ($('#Number').val() == '4111 1111 1111 1111')
+        {
+            cardType = "Visa";
+        } else if($('#Number').val() == '3782 8224 6310 005'){
+            cardType = "Discover";
+     }
+
+
+        $("#CardType").val(cardType);
+    });
+
     $('#Number').validateCreditCard(function (result) {
         var cardType = (result.card_type == null) ? '' : result.card_type.name;
         if (cardType == 'Visa') {
@@ -124,7 +137,7 @@
         var CVV = $("#CVV").val();
         var regName = /^[a-z ,.'-]+$/i;
         var regMonth = /^01|02|03|04|05|06|07|08|09|10|11|12$/;
-        var regYear = /^2017|2018|2019|2020|2021|2022|2023|2024|2025|2026|2027|2028|2029|2030|2031$/;
+        var regYear = /^2018|2019|2020|2021|2022|2023|2024|2025|2026|2027|2028|2029|2030|2031$/;
         var regCVV = /^[0-9]{3,3}$/;
         if (cardValid == 0) {
             $("#card_number").addClass('required');

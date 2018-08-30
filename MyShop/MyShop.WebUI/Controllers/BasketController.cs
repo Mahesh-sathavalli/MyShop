@@ -105,6 +105,14 @@ namespace MyShop.WebUI.Controllers
         [Authorize]
         public ActionResult PaymentInfo(PaymentInfoViewModel PaymentInfoViewModel)
         {
+            var ccnumber = PaymentInfoViewModel.Number.Replace(" ", string.Empty);
+
+            if(ccnumber != "378282246310005" && ccnumber != "4111111111111111")
+            {
+                ModelState.AddModelError("", "card not accepted");
+                return View(PaymentInfoViewModel);
+            }
+
             var paymentInfo = new PaymentInfo()
             {
                 Number= PaymentInfoViewModel.Number,
@@ -119,6 +127,7 @@ namespace MyShop.WebUI.Controllers
             order.Payment = paymentInfo;
 
             orderService.UpdateOrder(order);
+            basketService.ClearBasket(this.HttpContext);
            // return RedirectToAction("Thankyou", new { OrderId = order.Id });
             return RedirectToAction("Thankyou",new { OrderId = order.Id});
         }
