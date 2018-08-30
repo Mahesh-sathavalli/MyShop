@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/gh/PawelDecowski/jquery-creditcardvalidator@1.1.0/jquery.creditCardValidator.min.js"></script>
 </head>
 <body>
-    
+
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -35,18 +35,18 @@
                          <li><a style="color:black;" href="/Admin/Index">Admin</a></li>
                      }
                     <li>
-                        
+
                             <a style="padding-top:7px">
                                 <form class="form-inline">
-                                    <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search" aria-label="Search">
-                                    <i style="color:black" class="btn btn-success glyphicon glyphicon-search"></i>
+                                    <input class="form-control form-control-sm ml-3 w-75" id="searchText" type="text" placeholder="Search" aria-label="Search">
+                                    <i style="color:black" class="btn btn-success glyphicon glyphicon-search" onclick="search()" ></i>
                                 </form>
                             </a>
-                        
+
                     </li>
                 </ul>
                 @Html.Partial("_LoginPartial")
-                @{ 
+                @{
                     Html.RenderAction("BasketSummary", "Basket");
                 }
             </div>
@@ -55,7 +55,7 @@
     <div class="container body-content" style="margin-top:2%;">
         @RenderBody()
         <hr />
-        <footer>
+        <footer style="text-align:center">
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
@@ -64,7 +64,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 <style type="text/css">
-   
+
 .navbar-inverse {
     background-color: #fff !important;
     border-color: #ffffff !important;
@@ -72,7 +72,7 @@
 
 .navbar-brand {
     padding: 12px 12px !important;
-   
+
 }
 
     .list-group-item {
@@ -90,7 +90,69 @@
 
 </style>
 
+    <script type="text/javascript">
+
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        var searchText = getUrlParameter('search');
+
+        $('#searchText').val(searchText);
+
+        if (searchText !== undefined) {
+            $('#searchListHead').css('display', 'block');
+            $('#productListHead').css('display', 'none');
+        } else {
+            $('#productListHead').css('display', 'block');
+            $('#searchListHead').css('display', 'none');
+        }
+
+
+        function search() {
+            var searchText = $('#searchText').val();
+            if (searchText != '') {
+
+                var categoryFilter = getUrlParameter('Category');
+                if (categoryFilter === undefined) {
+                    window.location = '@Url.Action("ProductList", "Home")?search=' + searchText;
+                } else {
+
+                    window.location = '@Url.Action("ProductList", "Home")?Category=' + categoryFilter + '&search=' + searchText;
+                }
+
+
+            }
+
+
+        }
+
+
+
+    function checkSpcialChar (event) {
+            var regex = new RegExp("^[0-9a-zA-Z \b]+$");
+            var key = String.fromCharCode(!event.charCode ? event.which: event.charCode);
+            if (!regex.test(key))
+            {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+    </script>
 
 </body>
 </html>
-

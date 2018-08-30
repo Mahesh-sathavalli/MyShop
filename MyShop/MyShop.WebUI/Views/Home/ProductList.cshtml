@@ -16,7 +16,9 @@
 
 </div>
 
-<h2>ProductList</h2>
+<h2 id="productListHead">ProductList:</h2>
+
+<h2 id="searchListHead" style="display:none">Total Search results: @Model.Products.Count()</h2>
 
 <div class="col-md-12 productList">
 
@@ -24,7 +26,7 @@
     {
 
 
-        <div class="col-md-3 product" style="height:210px;margin:5px;padding:5px;border:1px solid #d4d4d4">
+        <div class="col-md-3 product" style="margin:5px;padding:5px;border:1px solid #d4d4d4">
 
             <div class="col-md-12" style="text-align:center">
                 <a href="@Url.Action("Details","Home", new {  Category = item.Category,id = item.Id  })" class="btn btn-default" style="height:80px;">
@@ -35,14 +37,23 @@
                 <strong>@Html.ActionLink(item.Name, "Details", new {  Category = item.Category, id = item.Id, })</strong>
             </div>
             
-            <div class="col-md-12">
-                <p>@item.Description</p>
+            <div class="col-md-12" >
+                @if (@item.Description.Length > 50)
+                {
+                    <p title="@item.Description">@item.Description.Substring(0, 50)<span>...</span></p>
+                }
+                else
+                {
+                    <p title="@item.Description">@item.Description</p>
+                }
+                
             </div>
-            <div class="col-md-12">
-                <h4 class="col-md-6">@item.Price</h4>
-                <div class="col-md-16"><a href="@Url.Action("AddToBasket", "Basket", new { Id=item.Id })" class="btn btn-default">Add To Basket</a></div>
+            <div class="col-md-12 ProductBtns">
+                <h4 class="col-md-6 row">@item.Price</h4>
+                <div class="col-md-16 row"><a href="@Url.Action("AddToBasket", "Basket", new { Id=item.Id })" class="btn btn-success">Add To Basket</a></div>
             </div>
         </div>
     }
 
 </div>
+<div class="col-md-12 clearfix" />

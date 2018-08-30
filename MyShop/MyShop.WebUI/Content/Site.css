@@ -17,8 +17,30 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+#loginForm input{
+    display: block;
+    margin: 0 auto;
 }
+
+#RegisterForm input{
+    width:250px
+}
+
+
+@media (min-width: 992px)
+{
+    .catList{
+       height:185px !important;
+    }
+   .productList .product{
+        height:210px;
+    }
+}
+
+@media (max-width: 992px)
+{
+    .ProductBtns{
+       text-align:center !important;
+    }
+}
+
