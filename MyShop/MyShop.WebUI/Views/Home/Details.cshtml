@@ -42,6 +42,13 @@
                 $@Html.DisplayFor(model => model.Product.Price)
             </dd>
 
+            <dt>
+                @Html.DisplayNameFor(model => model.Product.InStock)
+            </dt>
+            <dd>
+                $@Html.DisplayFor(model => model.Product.InStock)
+            </dd>
+
             <dt></dt>
             <dd><a href="@Url.Action("AddToBasket", "Basket", new { Id=Model.Product.Id })" class="btn btn-success">Add To Basket</a></dd>
 
