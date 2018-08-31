@@ -133,8 +133,9 @@ namespace MyShop.WebUI.Controllers
         }
 
         public ActionResult ThankYou(string OrderId) {
-            ViewBag.OrderId = OrderId;
-            return View();
+            Order order = orderService.GetOrder(OrderId);
+           // ViewBag.OrderId = OrderId;
+            return View(order);
         }
     }
 }
