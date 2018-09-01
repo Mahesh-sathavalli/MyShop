@@ -29,7 +29,8 @@
     <tr>
         <td><img style="height:50px" class="img" src="~/Content/ProductImages/@item.Image" /></td>
         <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
+            <a href="@Url.Action("Details","Home", new { id = item.ProductID  })">@item.ProductName</a>
+            
             @Html.Hidden("itemID", item.ProductID)
         </td>
         <td>

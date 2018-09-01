@@ -21,7 +21,7 @@ namespace MyShop.Services
             foreach (var item in basketItems) {
                 baseOrder.OrderItems.Add(new OrderItem()
                 {
-                    ProductId = item.Id,
+                    ProductId = item.ProductID,
                     Image = item.Image,
                     Price = item.Price,
                     ProductName = item.ProductName,
