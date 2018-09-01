@@ -115,10 +115,11 @@ namespace MyShop.WebUI.Controllers
 
             var paymentInfo = new PaymentInfo()
             {
-                Number= PaymentInfoViewModel.Number,
+                Number = PaymentInfoViewModel.Number.Substring(PaymentInfoViewModel.Number.Length - 4),
                 ExpiryMonth = PaymentInfoViewModel.ExpiryMonth,
                 ExpiryYear = PaymentInfoViewModel.ExpiryYear,
-                CVV = PaymentInfoViewModel.CVV,
+                //CVV = PaymentInfoViewModel.CVV,
+                CVV = 000,
                 Name = PaymentInfoViewModel.Name,
                 CardType = PaymentInfoViewModel.CardType
             };
