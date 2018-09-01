@@ -212,6 +212,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BasketController.cs" />
+    <Compile Include="Controllers\DiscountManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrderManagerController.cs" />
@@ -317,6 +318,10 @@
     <Content Include="Views\OrderManager\OrderItems.cshtml" />
     <Content Include="Views\Home\ProductList.cshtml" />
     <Content Include="Views\Basket\PaymentInfo.cshtml" />
+    <Content Include="Views\DiscountManager\Index.cshtml" />
+    <Content Include="Views\DiscountManager\Create.cshtml" />
+    <Content Include="Views\DiscountManager\Edit.cshtml" />
+    <Content Include="Views\DiscountManager\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

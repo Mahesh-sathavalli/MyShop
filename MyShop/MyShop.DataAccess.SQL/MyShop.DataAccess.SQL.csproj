@@ -48,21 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201711071327340_Initial.cs" />
-    <Compile Include="Migrations\201711071327340_Initial.Designer.cs">
-      <DependentUpon>201711071327340_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201809010940011_Initial.cs" />
+    <Compile Include="Migrations\201809010940011_Initial.Designer.cs">
+      <DependentUpon>201809010940011_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711091321341_AddBasket.cs" />
-    <Compile Include="Migrations\201711091321341_AddBasket.Designer.cs">
-      <DependentUpon>201711091321341_AddBasket.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201801032024566_AddCustomer.cs" />
-    <Compile Include="Migrations\201801032024566_AddCustomer.Designer.cs">
-      <DependentUpon>201801032024566_AddCustomer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201801101446455_AddedOrders.cs" />
-    <Compile Include="Migrations\201801101446455_AddedOrders.Designer.cs">
-      <DependentUpon>201801101446455_AddedOrders.cs</DependentUpon>
+    <Compile Include="Migrations\201809011503213_Initial1.cs" />
+    <Compile Include="Migrations\201809011503213_Initial1.Designer.cs">
+      <DependentUpon>201809011503213_Initial1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,17 +71,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711071327340_Initial.resx">
-      <DependentUpon>201711071327340_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201809010940011_Initial.resx">
+      <DependentUpon>201809010940011_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711091321341_AddBasket.resx">
-      <DependentUpon>201711091321341_AddBasket.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801032024566_AddCustomer.resx">
-      <DependentUpon>201801032024566_AddCustomer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201801101446455_AddedOrders.resx">
-      <DependentUpon>201801101446455_AddedOrders.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201809011503213_Initial1.resx">
+      <DependentUpon>201809011503213_Initial1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

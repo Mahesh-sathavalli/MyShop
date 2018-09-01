@@ -50,6 +50,8 @@
     <Compile Include="Models\Basket.cs" />
     <Compile Include="Models\BasketItem.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\ItemDiscountInfo.cs" />
+    <Compile Include="Models\DiscountInfo.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\PaymentInfo.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="ViewModels\BasketSummaryViewModel.cs" />
     <Compile Include="ViewModels\PaymentInfoViewModel.cs" />
     <Compile Include="ViewModels\ProductDetailViewModel.cs" />
+    <Compile Include="ViewModels\DiscountListViewModel.cs" />
     <Compile Include="ViewModels\ProductListViewModel.cs" />
     <Compile Include="ViewModels\ProductManagerViewModel.cs" />
   </ItemGroup>

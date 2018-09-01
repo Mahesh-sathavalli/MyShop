@@ -31,5 +31,9 @@ namespace MyShop.WebUI.Models
         }
 
         public System.Data.Entity.DbSet<MyShop.Core.Models.PaymentInfo> PaymentInfo { get; set; }
+        public System.Data.Entity.DbSet<MyShop.Core.Models.DiscountInfo> DiscountInfo { get; set; }
+
+        public System.Data.Entity.DbSet<MyShop.Core.Models.ItemDiscountInfo> ItemDiscountInfo { get; set; }
+        
     }
 }
