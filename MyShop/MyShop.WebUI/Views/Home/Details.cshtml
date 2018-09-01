@@ -39,7 +39,16 @@
             </dt>
 
             <dd>
-                $@Html.DisplayFor(model => model.Product.Price)
+               
+
+                @if (Model.ProductDiscount != null)
+                {
+                    <p ><del class="alert-danger">$@Model.Product.Price</del> @Model.ProductDiscount.discountedPrice</p>
+                }
+                else
+                {
+                    <p>$@Model.Product.Price</p>
+                }
             </dd>
 
             <dt>

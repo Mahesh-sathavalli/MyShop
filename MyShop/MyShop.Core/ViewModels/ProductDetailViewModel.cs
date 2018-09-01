@@ -12,5 +12,7 @@ namespace MyShop.Core.ViewModels
         public Product Product { get; set; }
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
         public Customer Customer { get; set; }
+
+        public ItemDiscountInfo ProductDiscount { get; set; }
     }
 }

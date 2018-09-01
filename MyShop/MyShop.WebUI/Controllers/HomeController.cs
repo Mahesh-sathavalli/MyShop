@@ -15,12 +15,16 @@ namespace MyShop.WebUI.Controllers
         IRepository<Product> context;
         IRepository<ProductCategory> productCategories;
         IRepository<PaymentInfo> PaymentInfoContext;
-        public HomeController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<Customer> Customers, IRepository<PaymentInfo> PaymentInfo) 
+        IRepository<DiscountInfo> DiscountInfoContext;
+        IRepository<ItemDiscountInfo> ItemDiscountInfoContext;
+        public HomeController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<Customer> Customers, IRepository<PaymentInfo> PaymentInfo, IRepository<DiscountInfo> discountInfoContext, IRepository<ItemDiscountInfo> Itemdiscountinfocontext) 
         {
             context = productContext;
             productCategories = productCategoryContext;
             customers = Customers;
             PaymentInfoContext = PaymentInfo;
+            DiscountInfoContext = discountInfoContext;
+            ItemDiscountInfoContext = Itemdiscountinfocontext;
         }
 
         public ActionResult Index(string Category=null)
@@ -77,11 +81,26 @@ namespace MyShop.WebUI.Controllers
             Product product = context.Find(Id);
             List<ProductCategory> categories = productCategories.Collection().ToList();
             Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
+            
+            List<ItemDiscountInfo> prodDiscount = ItemDiscountInfoContext.Collection().Where(s => s.ItemId == Id).ToList();
+            //DiscountInfo discount = DiscountInfoContext.Collection().Where(s => prodDiscount.Select(a => a.ItemId).Contains(s.ItemId)).OrderByDescending(s=>s.Priority).FirstOrDefault();
+
+            List<DiscountInfo> discountList = new List<DiscountInfo>(); 
+
+            foreach(var pd in prodDiscount)
+            {
+                discountList.Add(DiscountInfoContext.Collection().Where(s => s.Id == pd.DiscountId).FirstOrDefault());
+            }
+
+            DiscountInfo discount = discountList.OrderByDescending(s=>s.Priority).FirstOrDefault();
 
             ProductDetailViewModel model = new ProductDetailViewModel();
             model.Product = product;
             model.ProductCategories = categories;
             model.Customer = customer;
+            model.ProductDiscount = prodDiscount.Where(s => s.DiscountId == discount.Id).FirstOrDefault();
+
+
 
 
             if (product == null)
