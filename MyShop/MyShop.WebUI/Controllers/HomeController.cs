@@ -85,14 +85,23 @@ namespace MyShop.WebUI.Controllers
             List<ItemDiscountInfo> prodDiscount = ItemDiscountInfoContext.Collection().Where(s => s.ItemId == Id).ToList();
             //DiscountInfo discount = DiscountInfoContext.Collection().Where(s => prodDiscount.Select(a => a.ItemId).Contains(s.ItemId)).OrderByDescending(s=>s.Priority).FirstOrDefault();
 
-            List<DiscountInfo> discountList = new List<DiscountInfo>(); 
-
+            List<DiscountInfo> discountList = new List<DiscountInfo>();
+            DiscountInfo discount = new DiscountInfo();
             foreach(var pd in prodDiscount)
             {
-                discountList.Add(DiscountInfoContext.Collection().Where(s => s.Id == pd.DiscountId).FirstOrDefault());
+                var temp = DiscountInfoContext.Collection().Where(s => s.Id == pd.DiscountId && s.ExpiryDate >= DateTime.Now).FirstOrDefault();
+                if(temp!=null)
+                {
+                    discountList.Add(temp);
+                }
+                
             }
 
-            DiscountInfo discount = discountList.OrderByDescending(s=>s.Priority).FirstOrDefault();
+            if(discountList.Count>0)
+            {
+                discount = discountList.OrderByDescending(s => s.Priority).FirstOrDefault();
+            }
+            
 
             ProductDetailViewModel model = new ProductDetailViewModel();
             model.Product = product;

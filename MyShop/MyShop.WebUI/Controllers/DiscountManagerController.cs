@@ -20,7 +20,8 @@ namespace MyShop.WebUI.Controllers
         IRepository<DiscountInfo> DiscountInfoContext;
         IRepository<ItemDiscountInfo> ItemDiscountInfoContext;
 
-        public DiscountManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<DiscountInfo> discountInfoContext, IRepository<Customer> Customers, IRepository<ItemDiscountInfo> Itemdiscountinfocontext) {
+        public DiscountManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<DiscountInfo> discountInfoContext, IRepository<Customer> Customers, IRepository<ItemDiscountInfo> Itemdiscountinfocontext)
+        {
             context = productContext;
             productCategories = productCategoryContext;
             DiscountInfoContext = discountInfoContext;
@@ -34,15 +35,15 @@ namespace MyShop.WebUI.Controllers
 
             DiscountListViewModel DiscountListViewModel = new DiscountListViewModel();
             DiscountListViewModel.Customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
-            DiscountListViewModel.Products = context.Collection().ToList(); 
+            DiscountListViewModel.Products = context.Collection().ToList();
             DiscountListViewModel.ProductCategories = productCategories.Collection().ToList();
             DiscountListViewModel.DiscountList = Discount;
             return View(DiscountListViewModel);
-
             
         }
 
-        public ActionResult Create() {
+        public ActionResult Create()
+        {
             DiscountListViewModel DiscountListViewModel = new DiscountListViewModel();
             DiscountListViewModel.Customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
             DiscountListViewModel.Products = context.Collection().ToList();
@@ -55,15 +56,14 @@ namespace MyShop.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(DiscountInfo discount) {
+        public ActionResult Create(DiscountInfo discount)
+        {
             if (!ModelState.IsValid)
             {
                 return View(discount);
             }
-            else {
-
-
-
+            else
+            {
                 DiscountInfoContext.Insert(discount);
                 DiscountInfoContext.Commit();
 
@@ -74,7 +74,8 @@ namespace MyShop.WebUI.Controllers
 
         }
 
-        public ActionResult Edit(string Id) {
+        public ActionResult Edit(string Id)
+        {
             DiscountInfo Discount1 = DiscountInfoContext.Find(Id);
             List<Product> products = context.Collection().ToList();
             List<ProductCategory> categories = productCategories.Collection().ToList();
@@ -84,22 +85,21 @@ namespace MyShop.WebUI.Controllers
             {
                 return HttpNotFound();
             }
-            else {
+            else
+            {
                 DiscountListViewModel DiscountListViewModel = new DiscountListViewModel();
                 DiscountListViewModel.Customer = customer;
                 DiscountListViewModel.Products = products;
                 DiscountListViewModel.ProductCategories = categories;
                 DiscountListViewModel.Discount = Discount1;
 
-
-                
-
                 return View(DiscountListViewModel);
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(DiscountListViewModel discountL, string Id, HttpPostedFileBase file) {
+        public ActionResult Edit(DiscountListViewModel discountL, string Id, HttpPostedFileBase file)
+        {
             DiscountInfo discountToEdit = DiscountInfoContext.Find(Id);
 
             if (discountToEdit == null)
@@ -108,21 +108,6 @@ namespace MyShop.WebUI.Controllers
             }
             else
             {
-                //if (!ModelState.IsValid) {
-                //    DiscountInfo Discount1 = DiscountInfoContext.Find(Id);
-                //    List<Product> products = context.Collection().ToList();
-                //    List<ProductCategory> categories = productCategories.Collection().ToList();
-                //    Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
-
-                //    DiscountListViewModel DiscountListViewModel = new DiscountListViewModel();
-                //    DiscountListViewModel.Customer = customer;
-                //    DiscountListViewModel.Products = products;
-                //    DiscountListViewModel.ProductCategories = categories;
-                //    DiscountListViewModel.Discount = Discount1;
-
-                //    return View(DiscountListViewModel);
-                //}
-
 
                 discountToEdit.Name = discountL.Discount.Name;
                 discountToEdit.Code = discountL.Discount.Code;
@@ -135,8 +120,6 @@ namespace MyShop.WebUI.Controllers
                 discountToEdit.Priority = discountL.Discount.Priority;
 
                 DiscountInfoContext.Commit();
-
-
 
                 UpdateDiscountData(Id);
 
@@ -161,7 +144,8 @@ namespace MyShop.WebUI.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(string Id) {
+        public ActionResult ConfirmDelete(string Id)
+        {
             DiscountInfo discountToDelete = DiscountInfoContext.Find(Id);
 
             if (discountToDelete == null)
@@ -178,38 +162,35 @@ namespace MyShop.WebUI.Controllers
 
 
         [HttpGet]
-        public JsonResult getDate()
+        public JsonResult getDiscontData()
         {
+
+            List<Product> products = context.Collection().ToList();
+            List<ProductCategory> categories = productCategories.Collection().ToList();
+            Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
+
+
+            DiscountListViewModel DiscountListViewModel = new DiscountListViewModel();
+            DiscountListViewModel.Customer = customer;
+            DiscountListViewModel.Products = products;
+            DiscountListViewModel.ProductCategories = categories;
+            DiscountListViewModel.Discount = new DiscountInfo();
             
-                    
-                    List<Product> products = context.Collection().ToList();
-                    List<ProductCategory> categories = productCategories.Collection().ToList();
-                    Customer customer = customers.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
+            return Json(DiscountListViewModel, JsonRequestBehavior.AllowGet);
 
-
-                    DiscountListViewModel DiscountListViewModel = new DiscountListViewModel();
-                    DiscountListViewModel.Customer = customer;
-                    DiscountListViewModel.Products = products;
-                    DiscountListViewModel.ProductCategories = categories;
-                    DiscountListViewModel.Discount = new DiscountInfo();
-
-
-
-            return Json(DiscountListViewModel,JsonRequestBehavior.AllowGet);
-            
         }
 
 
         public void UpdateDiscountData(string Id)
         {
             DiscountInfo discount = DiscountInfoContext.Find(Id);
-            Product product = context.Collection().Where(s => s.Id == discount.ItemId && discount.ItemType==1).FirstOrDefault();
+            Product product = context.Collection().Where(s => s.Id == discount.ItemId && discount.ItemType == 1).FirstOrDefault();
             ItemDiscountInfo ItemDiscountToEdit = ItemDiscountInfoContext.Collection().Where(s => s.DiscountId == discount.Id && discount.ItemType == 1).FirstOrDefault();
 
             ProductCategory Category = productCategories.Collection().Where(s => s.Id == discount.ItemId && discount.ItemType == 2).FirstOrDefault();
 
             List<Product> productInCategory = new List<Product>();
-            if(Category != null)
+            if (Category != null)
             {
                 productInCategory = context.Collection().Where(s => s.Category.Equals(Category.Category) && discount.ItemType == 2).ToList();
             }
@@ -223,7 +204,7 @@ namespace MyShop.WebUI.Controllers
                 ItemDiscountToEdit.DiscountId = discount.Id;
                 ItemDiscountToEdit.ItemId = discount.ItemId;
                 ItemDiscountToEdit.ItemPrice = product.Price;
-                
+
                 if (discount.AppliedType == 1)
                 {
                     //AppliedTYpe = Amount
@@ -235,15 +216,15 @@ namespace MyShop.WebUI.Controllers
                     decimal temp = (product.Price * (discount.Percentage / 100));
                     ItemDiscountToEdit.discountedPrice = product.Price - temp;
                 }
-                ItemDiscountInfoContext.Commit();                
+                ItemDiscountInfoContext.Commit();
             }
-            else if(ItemDiscountToEdit == null && product != null)
+            else if (ItemDiscountToEdit == null && product != null)
             {
                 ItemDiscountInfo IDI = new ItemDiscountInfo();
                 IDI.DiscountId = discount.Id;
                 IDI.ItemId = discount.ItemId;
                 IDI.ItemPrice = product.Price;
-                
+
                 if (discount.AppliedType == 1)
                 {
                     //AppliedTYpe = Amount
@@ -252,50 +233,50 @@ namespace MyShop.WebUI.Controllers
                 else if (discount.AppliedType == 2)
                 {
                     //AppliedType = Percentage
-                    decimal temp = (product.Price * (discount.Percentage/100));
+                    decimal temp = (product.Price * (discount.Percentage / 100));
                     IDI.discountedPrice = product.Price - temp;
                 }
                 ItemDiscountInfoContext.Insert(IDI);
                 ItemDiscountInfoContext.Commit();
             }
-            else if (ItemDiscountToEditList.Count > 0  && productInCategory.Count>0)
+            else if (ItemDiscountToEditList.Count > 0 && productInCategory.Count > 0)
             {
-                foreach(var itr in ItemDiscountToEditList)
+                foreach (var itr in ItemDiscountToEditList)
                 {
-                        var productTemp = productInCategory.Where(s => s.Id == itr.ItemId).FirstOrDefault();
+                    var productTemp = productInCategory.Where(s => s.Id == itr.ItemId).FirstOrDefault();
 
 
-                        if ( productTemp!= null)
-                        {
+                    if (productTemp != null)
+                    {
                         ItemDiscountToEdit = itr;
-                       
-                           
-                            ItemDiscountToEdit.DiscountId = itr.DiscountId;
-                            ItemDiscountToEdit.ItemId =itr.ItemId;
-                            ItemDiscountToEdit.ItemPrice = productTemp.Price;
 
-                            if (discount.AppliedType == 1)
-                            {
-                                //AppliedTYpe = Amount
-                                ItemDiscountToEdit.discountedPrice = productTemp.Price - discount.Amount;
-                            }
-                            else if (discount.AppliedType == 2)
-                            {
-                                //AppliedType = Percentage
-                                decimal temp = (productTemp.Price * (discount.Percentage / 100));
-                                ItemDiscountToEdit.discountedPrice = productTemp.Price - temp;
-                            }
-                            ItemDiscountInfoContext.Commit();
+
+                        ItemDiscountToEdit.DiscountId = itr.DiscountId;
+                        ItemDiscountToEdit.ItemId = itr.ItemId;
+                        ItemDiscountToEdit.ItemPrice = productTemp.Price;
+
+                        if (discount.AppliedType == 1)
+                        {
+                            //AppliedTYpe = Amount
+                            ItemDiscountToEdit.discountedPrice = productTemp.Price - discount.Amount;
                         }
+                        else if (discount.AppliedType == 2)
+                        {
+                            //AppliedType = Percentage
+                            decimal temp = (productTemp.Price * (discount.Percentage / 100));
+                            ItemDiscountToEdit.discountedPrice = productTemp.Price - temp;
+                        }
+                        ItemDiscountInfoContext.Commit();
+                    }
 
-                    
-                   
+
+
                 }
-                
+
             }
-            else if (ItemDiscountToEditList.Count <= 0  && productInCategory.Count >0)
+            else if (ItemDiscountToEditList.Count <= 0 && productInCategory.Count > 0)
             {
-                foreach(var productTemp in productInCategory)
+                foreach (var productTemp in productInCategory)
                 {
                     ItemDiscountInfo IDI = new ItemDiscountInfo();
                     IDI.DiscountId = discount.Id;
@@ -316,7 +297,7 @@ namespace MyShop.WebUI.Controllers
                     ItemDiscountInfoContext.Insert(IDI);
                     ItemDiscountInfoContext.Commit();
                 }
-                
+
             }
 
         }

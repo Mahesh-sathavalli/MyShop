@@ -115,7 +115,7 @@ namespace MyShop.WebUI.Controllers
 
             var paymentInfo = new PaymentInfo()
             {
-                Number = PaymentInfoViewModel.Number.Substring(PaymentInfoViewModel.Number.Length - 4),
+                Number = "****-****-****-"+PaymentInfoViewModel.Number.Substring(PaymentInfoViewModel.Number.Length - 4),
                 ExpiryMonth = PaymentInfoViewModel.ExpiryMonth,
                 ExpiryYear = PaymentInfoViewModel.ExpiryYear,
                 //CVV = PaymentInfoViewModel.CVV,
@@ -126,6 +126,7 @@ namespace MyShop.WebUI.Controllers
             
             var order = orderService.GetOrder(PaymentInfoViewModel.OrderID);
             order.Payment = paymentInfo;
+            order.OrderStatus = "Payment Processed";
 
             orderService.UpdateOrder(order);
             basketService.ClearBasket(this.HttpContext);

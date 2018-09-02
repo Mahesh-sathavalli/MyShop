@@ -223,13 +223,21 @@ namespace MyShop.Services
         {
             List<ItemDiscountInfo> prodDiscount = itemDiscountInfoContext.Collection().Where(s => s.ItemId == Id).ToList();
             List<DiscountInfo> discountList = new List<DiscountInfo>();
-
+            DiscountInfo discount = new DiscountInfo();
             foreach (var pd in prodDiscount)
             {
-                discountList.Add(discountInfoContext.Collection().Where(s => s.Id == pd.DiscountId).FirstOrDefault());
+                var temp = discountInfoContext.Collection().Where(s => s.Id == pd.DiscountId && s.ExpiryDate >= DateTime.Now).FirstOrDefault();
+                if (temp != null)
+                {
+                    discountList.Add(temp);
+                }
+                
             }
-
-            DiscountInfo discount = discountList.OrderByDescending(s => s.Priority).FirstOrDefault();
+            if(discountList.Count >0)
+            {
+                discount = discountList.OrderByDescending(s => s.Priority).FirstOrDefault();
+            }
+            
 
             if(discount == null)
             {

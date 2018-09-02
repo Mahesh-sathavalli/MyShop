@@ -7,7 +7,7 @@
 
 <h2>Basket</h2>
 
-<table class="table">
+<table class="table table-responsive">
     <tr>
         <th></th>
         <th>
@@ -35,7 +35,7 @@
         </td>
         <td>
             
-              <select style="width=45px" id="dropDown" class="selectDrop" data-id="@item.ProductID" value ="@item.Quanity">
+              <select style="width:45px" id="dropDown" class="selectDrop" data-id="@item.ProductID" value ="@item.Quanity">
                   @for(int i = 1; i <= 10; i++)
                   {
                       <option value="@i" @(item.Quanity == i ? "selected" : "")>@i  </option>
@@ -75,7 +75,17 @@
             @String.Format("{0:c}", (from p in Model select p.DiscountedPrice * p.Quanity).Sum())<br/>
             @String.Format("{0:c}", (from p in Model select (p.Price-p.DiscountedPrice)*p.Quanity).Sum())
         </td>
-        <td><a href="@Url.Action("Checkout", "Basket")"class="btn btn-primary">Checkout</a></td>
+        <td>
+            @if (@Model.Count() >0)
+            {
+                <a href="@Url.Action("Checkout", "Basket")" class="btn btn-primary">Checkout</a>
+            }
+            else
+            {
+                <a href="@Url.Action("Checkout", "Basket")" class="btn btn-primary disabled">Checkout</a>
+            }
+            
+        </td>
     </tr>
 
 </table>

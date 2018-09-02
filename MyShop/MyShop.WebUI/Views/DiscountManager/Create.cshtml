@@ -35,9 +35,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Discount.ExpiryDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Discount.ExpiryDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Discount.ExpiryDate, "", new { @class = "text-danger" })
-            </div>
+                <div class='input-group date' id='datetimepicker1'>
+                    @Html.EditorFor(model => model.Discount.ExpiryDate, new { htmlAttributes = new { @class = "form-control" } })
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                 </div>
+                    @Html.ValidationMessageFor(model => model.Discount.ExpiryDate, "", new { @class = "text-danger" })
+                </div>
         </div>
 
         <div class="form-group">
@@ -140,12 +145,15 @@
 <script type="text/javascript">
 
     $(function () {
+        
+        $('#datetimepicker1').datetimepicker();
+        
         $("#Discount_ItemType").change(function () {
             var ItemType = $(this).val();
             var value = $('#Discount_Id').val();
             $.ajax({
                 type: "GET",
-                url: '/DiscountManager/getDate',
+                url: '/DiscountManager/getDiscontData',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
