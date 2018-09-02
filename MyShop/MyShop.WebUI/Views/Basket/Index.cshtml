@@ -44,11 +44,22 @@
         </td>
         
         <td>
-            @String.Format("{0:c}", item.Price)
+           
+            @if ( item.DiscountedPrice != item.Price)
+                {
+                <p><del class="alert-danger">@String.Format("{0:c}", item.Price)</del></p>
+                <p>@String.Format("{0:c}", item.DiscountedPrice)</p>
+            }
+            else
+            {
+                <p>@String.Format("{0:c}", item.Price)</p>
+            }
         </td>
         <td>
             @Html.Hidden("quant",item.Quanity)
-            @String.Format("{0:c}", item.Price * item.Quanity)
+            @String.Format("{0:c}", item.DiscountedPrice * item.Quanity)
+            
+            
         </td>
         <td>
             <a href="@Url.Action("RemoveFromBasket", "Basket", new { Id=item.Id })" class="btn btn-danger">Delete</a>
@@ -56,8 +67,14 @@
     </tr>
 }
     <tr>
-        <td colspan="4" style="text-align:right"><strong>Basket Total</strong></td>
-        <td>@String.Format("{0:c}", (from p in Model select p.Price * p.Quanity).Sum())</td>
+        <td colspan="4" style="text-align:right">
+            <strong>Basket Total</strong><br/>
+            <strong>You Saved</strong>
+        </td>
+        <td>
+            @String.Format("{0:c}", (from p in Model select p.DiscountedPrice * p.Quanity).Sum())<br/>
+            @String.Format("{0:c}", (from p in Model select (p.Price-p.DiscountedPrice)*p.Quanity).Sum())
+        </td>
         <td><a href="@Url.Action("Checkout", "Basket")"class="btn btn-primary">Checkout</a></td>
     </tr>
 

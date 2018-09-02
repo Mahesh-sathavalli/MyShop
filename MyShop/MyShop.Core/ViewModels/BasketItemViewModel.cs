@@ -17,5 +17,7 @@ namespace MyShop.Core.ViewModels
         public string Image { get; set; }
 
         public int CurrentStock { get; set; }
+
+        public decimal DiscountedPrice { get; set; }
     }
 }

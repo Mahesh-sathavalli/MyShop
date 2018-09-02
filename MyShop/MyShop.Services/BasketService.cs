@@ -14,12 +14,16 @@ namespace MyShop.Services
     {
         IRepository<Product> productContext;
         IRepository<Basket> basketContext;
+        IRepository<DiscountInfo> discountInfoContext;
+        IRepository<ItemDiscountInfo> itemDiscountInfoContext;
 
         public const string BasketSessionName = "eCommerceBasket";
 
-        public BasketService(IRepository<Product> ProductContext, IRepository<Basket> BasketContext) {
+        public BasketService(IRepository<Product> ProductContext, IRepository<Basket> BasketContext, IRepository<DiscountInfo> DiscountInfoContext, IRepository<ItemDiscountInfo> ItemDiscountInfoContext) {
             this.basketContext = BasketContext;
             this.productContext = ProductContext;
+            this.discountInfoContext = DiscountInfoContext;
+            this.itemDiscountInfoContext = ItemDiscountInfoContext;
         }
 
         private Basket GetBasket(HttpContextBase httpContext, bool createIfNull) {
@@ -142,7 +146,6 @@ namespace MyShop.Services
 
         public List<BasketItemViewModel> GetBasketItems(HttpContextBase httpContext) {
             Basket basket = GetBasket(httpContext, false);
-
             if (basket != null)
             {
                 var results = (from b in basket.BasketItems
@@ -155,10 +158,20 @@ namespace MyShop.Services
                                    ProductID = p.Id,
                                    Image = p.Image,
                                    Price = p.Price,
-                                   CurrentStock = p.InStock
+                                   CurrentStock = p.InStock,
+                                   DiscountedPrice = p.Price              
                                }
                               ).ToList();
 
+                foreach(var item in results)
+                {
+                    ItemDiscountInfo IDI = getPriorityItemDiscount(item.ProductID);
+
+                    if(IDI != null && IDI.ItemId == item.ProductID)
+                    {
+                        item.DiscountedPrice = IDI.discountedPrice;
+                    }
+                }
                 return results;
             }
             else {
@@ -203,6 +216,26 @@ namespace MyShop.Services
 
             return true;
 
+        }
+
+
+        public ItemDiscountInfo getPriorityItemDiscount(string Id)
+        {
+            List<ItemDiscountInfo> prodDiscount = itemDiscountInfoContext.Collection().Where(s => s.ItemId == Id).ToList();
+            List<DiscountInfo> discountList = new List<DiscountInfo>();
+
+            foreach (var pd in prodDiscount)
+            {
+                discountList.Add(discountInfoContext.Collection().Where(s => s.Id == pd.DiscountId).FirstOrDefault());
+            }
+
+            DiscountInfo discount = discountList.OrderByDescending(s => s.Priority).FirstOrDefault();
+
+            if(discount == null)
+            {
+                return null;
+            }
+            return prodDiscount.Where(a => a.DiscountId == discount.Id).FirstOrDefault();
         }
     }
 }

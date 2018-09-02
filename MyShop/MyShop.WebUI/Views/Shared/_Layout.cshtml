@@ -133,13 +133,20 @@
                     window.location = '@Url.Action("ProductList", "Home")?Category=' + categoryFilter + '&search=' + searchText;
                 }
 
-
+                
             }
 
 
         }
 
-
+        $('#searchText').keypress(function (event) {
+            
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode == '13') {
+                event.preventDefault();
+                search();
+            }
+        });
 
     function checkSpcialChar (event) {
             var regex = new RegExp("^[0-9a-zA-Z \b]+$");

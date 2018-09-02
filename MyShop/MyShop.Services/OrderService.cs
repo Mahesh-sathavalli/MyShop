@@ -23,7 +23,7 @@ namespace MyShop.Services
                 {
                     ProductId = item.ProductID,
                     Image = item.Image,
-                    Price = item.Price,
+                    Price = item.DiscountedPrice,
                     ProductName = item.ProductName,
                     Quanity = item.Quanity
                 });
