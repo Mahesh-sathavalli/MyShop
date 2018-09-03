@@ -92,7 +92,7 @@ namespace MyShop.Services
                     {
                         isOkaytoAdd = false;
                     }
-                    else if(product.InStock > quantity)
+                    else if(product.InStock > quantity || product.Category == "Sports, Fitness and Outdoors")
                     {
                         UpdateStock(product, "Add");
                         basket.BasketItems.Add(item);
@@ -108,7 +108,7 @@ namespace MyShop.Services
                     if (product.InStock == 0 )
                     {
                         isOkaytoAdd = false;
-                    }else if((product.InStock + item.Quanity) >= quantity)
+                    }else if((product.InStock + item.Quanity) >= quantity || product.Category == "Sports, Fitness and Outdoors")
                     {
                         product.InStock = product.InStock + item.Quanity;
                         UpdateStock(product, "Add",quantity);
