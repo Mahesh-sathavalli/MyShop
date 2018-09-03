@@ -67,7 +67,7 @@ namespace MyShop.WebUI.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                products = products.Where(p => p.Name.ToLower().Contains(search)).ToList();
+                products = products.Where(p => p.Name.ToLower().Contains(search.ToLower())).ToList();
             }
 
             ProductListViewModel model = new ProductListViewModel();

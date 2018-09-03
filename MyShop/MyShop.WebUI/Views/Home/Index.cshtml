@@ -7,7 +7,7 @@
         @foreach (var cat in Model.ProductCategories)
         {
             <li>
-                @Html.ActionLink(cat.Category, "ProductList", new { Category = cat.Category }, new { @class = Request["Category"] == cat.Category ? "list-group-item active" : "list-group-item" })
+                @Html.ActionLink(cat.Category, "ProductList", new { Category = cat.Id }, new { @class = Request["Category"] == cat.Id ? "list-group-item active" : "list-group-item" })
             </li>
         }
     </ul>
@@ -34,7 +34,7 @@ else
 
         <div class="col-md-2 row" style="height:185px;margin:5px;padding:5px;">
             <div class="col-md-12 categorycell" style="text-align:center">
-                <a href="@Url.Action("ProductList","Home", new { Category = item.Category })" class="btn btn-default">
+                <a href="@Url.Action("ProductList","Home", new { Category = item.Id })" class="btn btn-default">
 
                     @if (@item.Image == null)
                     {
@@ -48,7 +48,7 @@ else
 
 
                 </a>
-                <a href="@Url.Action("ProductList","Home", new { Category = item.Category })" style="color:black; font-weight:bold;" title="@item.Category">
+                <a href="@Url.Action("ProductList","Home", new { Category = item.Id })" style="color:black; font-weight:bold;" title="@item.Category">
 
                     @if (@item.Category.Length > 20)
                     {
