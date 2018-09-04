@@ -155,7 +155,17 @@ namespace MyShop.WebUI.Controllers
             else
             {
                 DiscountInfoContext.Delete(Id);
+                
+
+                var itemDiscountList = ItemDiscountInfoContext.Collection().Where(s => s.DiscountId == Id).ToList();
+                foreach (var item in itemDiscountList)
+                {
+                    ItemDiscountInfoContext.Delete(item.Id);
+                    
+                }
+                ItemDiscountInfoContext.Commit();
                 DiscountInfoContext.Commit();
+
                 return RedirectToAction("Index");
             }
         }
@@ -192,7 +202,7 @@ namespace MyShop.WebUI.Controllers
             List<Product> productInCategory = new List<Product>();
             if (Category != null)
             {
-                productInCategory = context.Collection().Where(s => s.Category.Equals(Category.Category) && discount.ItemType == 2).ToList();
+                productInCategory = context.Collection().Where(s => s.Category.Equals(Category.Id) && discount.ItemType == 2).ToList();
             }
 
             List<ItemDiscountInfo> ItemDiscountToEditList = ItemDiscountInfoContext.Collection().Where(s => s.DiscountId == discount.Id && discount.ItemType == 2).ToList();

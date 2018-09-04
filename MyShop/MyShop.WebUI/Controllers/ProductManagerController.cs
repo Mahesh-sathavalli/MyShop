@@ -16,10 +16,14 @@ namespace MyShop.WebUI.Controllers
     {
         IRepository<Product> context;
         IRepository<ProductCategory> productCategories;
+        IRepository<DiscountInfo> DiscountInfoContext;
+        IRepository<ItemDiscountInfo> ItemDiscountInfoContext;
 
-        public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext) {
+        public ProductManagerController(IRepository<Product> productContext, IRepository<ProductCategory> productCategoryContext, IRepository<DiscountInfo> discountInfoContext,  IRepository<ItemDiscountInfo> Itemdiscountinfocontext) {
             context = productContext;
             productCategories = productCategoryContext;
+            DiscountInfoContext = discountInfoContext;
+            ItemDiscountInfoContext = Itemdiscountinfocontext;
         }
         // GET: ProductManager
         public ActionResult Index()
@@ -51,6 +55,13 @@ namespace MyShop.WebUI.Controllers
 
                 context.Insert(product);
                 context.Commit();
+
+                List<DiscountInfo> discountList = DiscountInfoContext.Collection().Where(s => s.ItemId == product.Id || s.ItemId == product.Category).ToList();
+
+                foreach(var i in discountList)
+                {
+                    UpdateDiscountData(i.Id);
+                }
 
                 return RedirectToAction("Index");
             }
@@ -98,6 +109,17 @@ namespace MyShop.WebUI.Controllers
                 productToEdit.InStock = product.InStock;
                 context.Commit();
 
+                //Update discount info
+
+                List<DiscountInfo> discountList = DiscountInfoContext.Collection().Where(s => s.ItemId == product.Id || s.ItemId == product.Category).ToList();
+
+                foreach(var i in discountList)
+                {
+                    UpdateDiscountData(i.Id);
+                }
+
+
+
                 return RedirectToAction("Index");
             }
         }
@@ -131,6 +153,160 @@ namespace MyShop.WebUI.Controllers
                 context.Commit();
                 return RedirectToAction("Index");
             }
+        }
+
+
+        public void UpdateDiscountData(string Id)
+        {
+            DiscountInfo discount = DiscountInfoContext.Find(Id);
+            Product product = context.Collection().Where(s => s.Id == discount.ItemId && discount.ItemType == 1).FirstOrDefault();
+            ItemDiscountInfo ItemDiscountToEdit = ItemDiscountInfoContext.Collection().Where(s => s.DiscountId == discount.Id && discount.ItemType == 1).FirstOrDefault();
+
+            ProductCategory Category = productCategories.Collection().Where(s => s.Id == discount.ItemId && discount.ItemType == 2).FirstOrDefault();
+
+            List<Product> productInCategory = new List<Product>();
+            if (Category != null)
+            {
+                productInCategory = context.Collection().Where(s => s.Category.Equals(Category.Id) && discount.ItemType == 2).ToList();
+            }
+
+            List<ItemDiscountInfo> ItemDiscountToEditList = ItemDiscountInfoContext.Collection().Where(s => s.DiscountId == discount.Id && discount.ItemType == 2).ToList();
+            // upated ItemDiscountInfo it discountId exist and item Type is product
+
+
+            if (ItemDiscountToEdit != null && product != null)
+            {
+                ItemDiscountToEdit.DiscountId = discount.Id;
+                ItemDiscountToEdit.ItemId = discount.ItemId;
+                ItemDiscountToEdit.ItemPrice = product.Price;
+
+                if (discount.AppliedType == 1)
+                {
+                    //AppliedTYpe = Amount
+                    ItemDiscountToEdit.discountedPrice = product.Price - discount.Amount;
+                }
+                else if (discount.AppliedType == 2)
+                {
+                    //AppliedType = Percentage
+                    decimal temp = (product.Price * (discount.Percentage / 100));
+                    ItemDiscountToEdit.discountedPrice = product.Price - temp;
+                }
+                ItemDiscountInfoContext.Commit();
+            }
+            else if (ItemDiscountToEdit == null && product != null)
+            {
+                ItemDiscountInfo IDI = new ItemDiscountInfo();
+                IDI.DiscountId = discount.Id;
+                IDI.ItemId = discount.ItemId;
+                IDI.ItemPrice = product.Price;
+
+                if (discount.AppliedType == 1)
+                {
+                    //AppliedTYpe = Amount
+                    IDI.discountedPrice = product.Price - discount.Amount;
+                }
+                else if (discount.AppliedType == 2)
+                {
+                    //AppliedType = Percentage
+                    decimal temp = (product.Price * (discount.Percentage / 100));
+                    IDI.discountedPrice = product.Price - temp;
+                }
+                ItemDiscountInfoContext.Insert(IDI);
+                ItemDiscountInfoContext.Commit();
+            }
+            else if (ItemDiscountToEditList.Count > 0 && productInCategory.Count > 0)
+            {
+                foreach (var itr in ItemDiscountToEditList)
+                {
+                    var productTemp = productInCategory.Where(s => s.Id == itr.ItemId).FirstOrDefault();
+
+
+                    if (productTemp != null)
+                    {
+                        ItemDiscountToEdit = itr;
+
+
+                        ItemDiscountToEdit.DiscountId = itr.DiscountId;
+                        ItemDiscountToEdit.ItemId = itr.ItemId;
+                        ItemDiscountToEdit.ItemPrice = productTemp.Price;
+
+                        if (discount.AppliedType == 1)
+                        {
+                            //AppliedTYpe = Amount
+                            ItemDiscountToEdit.discountedPrice = productTemp.Price - discount.Amount;
+                        }
+                        else if (discount.AppliedType == 2)
+                        {
+                            //AppliedType = Percentage
+                            decimal temp = (productTemp.Price * (discount.Percentage / 100));
+                            ItemDiscountToEdit.discountedPrice = productTemp.Price - temp;
+                        }
+                        ItemDiscountInfoContext.Commit();
+                    }
+
+
+
+                }
+
+            }
+            else if (ItemDiscountToEditList.Count <= 0 && productInCategory.Count > 0)
+            {
+                foreach (var productTemp in productInCategory)
+                {
+                    ItemDiscountInfo IDI = new ItemDiscountInfo();
+                    IDI.DiscountId = discount.Id;
+                    IDI.ItemId = productTemp.Id;
+                    IDI.ItemPrice = productTemp.Price;
+
+                    if (discount.AppliedType == 1)
+                    {
+                        //AppliedTYpe = Amount
+                        IDI.discountedPrice = productTemp.Price - discount.Amount;
+                    }
+                    else if (discount.AppliedType == 2)
+                    {
+                        //AppliedType = Percentage
+                        decimal temp = (productTemp.Price * (discount.Percentage / 100));
+                        IDI.discountedPrice = productTemp.Price - temp;
+                    }
+                    ItemDiscountInfoContext.Insert(IDI);
+                    ItemDiscountInfoContext.Commit();
+                }
+
+            }
+
+             if (ItemDiscountToEditList.Count < productInCategory.Count )
+            {
+                var ItemIdList = ItemDiscountToEditList.Select(s => s.ItemId);
+                foreach (var productTemp in productInCategory)
+                {
+                    
+                    if (!ItemIdList.Contains(productTemp.Id))
+                    {
+                        ItemDiscountInfo IDI = new ItemDiscountInfo();
+                        IDI.DiscountId = discount.Id;
+                        IDI.ItemId = productTemp.Id;
+                        IDI.ItemPrice = productTemp.Price;
+
+                        if (discount.AppliedType == 1)
+                        {
+                            //AppliedTYpe = Amount
+                            IDI.discountedPrice = productTemp.Price - discount.Amount;
+                        }
+                        else if (discount.AppliedType == 2)
+                        {
+                            //AppliedType = Percentage
+                            decimal temp = (productTemp.Price * (discount.Percentage / 100));
+                            IDI.discountedPrice = productTemp.Price - temp;
+                        }
+                        ItemDiscountInfoContext.Insert(IDI);
+                        ItemDiscountInfoContext.Commit();
+                    }
+                    
+                }
+
+            }
+
         }
     }
 }
